@@ -43,7 +43,8 @@ class Str2Digits {
         'billion' => 1000000000);
 
     public function parse($str) {
-        $str = preg_replace("/[^a-zA-Z]+/", " ", $str);
+        $str = strtolower(preg_replace("/[^a-zA-Z]+/", " ", $str));
+        
         $words = explode(" ", $str);
 
         $total = 1;
@@ -69,7 +70,7 @@ class Str2Digits {
                 continue;
             }
             $init_digit = true;
-            $word = strtolower($word);
+            
 
             if ($word == "and") {
                 if ($last_digit === null) {
@@ -84,6 +85,9 @@ class Str2Digits {
                     if ($last_digit !== null && $last_digit > $this->numbers[$word]) {
                         $total += $this->numbers[$word];
                     } else {
+                        if($last_digit === null){
+                            $total = 1;
+                        }
                         $total *= $this->numbers[$word];
                     }
                 }
@@ -95,7 +99,7 @@ class Str2Digits {
                 $final_sum[] = $total;
                 $last_digit = null;
                 $force_addition = false;
-                $total = 1;
+                $total = 0;
             }
         }
         if ($init_digit) {
